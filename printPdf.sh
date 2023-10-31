@@ -11,17 +11,23 @@ GHOSTSCRIPT_IMAGE='minidocks/ghostscript:9'
 pdf=$(mktemp --suffix=.pdf)
 pdfCompressed=${pdf//.pdf/.min.pdf}
 
-image=$(docker build -q . )
-container=$(docker run --rm -d "$image")
-address=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "${container}")
+## maybe they need all this because they're running on a CI.
+## For local development we might just spin the same server 
+# image=$(docker build -q . )
+# container=$(docker run --rm -d "$image")
+container=$(./startPresentation.sh)
+echo "Spawned container $container"
+# give time to the server to come up
+sleep 5
 
+address=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "${container}")
 sleep 1
 
 rm "${pdf}" || true
 
 # When images are not printed, increase --delay
 docker run --rm --shm-size=4G ${PRINTING_IMAGE} \
-  athenapdf --delay 2000 --stdout "http://${address}:8080/?print-pdf" \
+  athenapdf --delay 2000 --stdout "http://${address}:8000/?print-pdf" \
   > "${pdf}"
 
 if [[ $COMPRESS == "true" ]]; then
@@ -36,18 +42,18 @@ if [[ $COMPRESS == "true" ]]; then
 fi 
 
 finalPdf="$(if [[ $COMPRESS == "true" ]]; then echo "${pdfCompressed}"; else echo "${pdf}"; fi)"
+pdfFilename="$(yq '.title_for_files' config.yaml).pdf"
+cp ${finalPdf} ${pdfFilename}
 
 if [ -t 1 ] ; then
   # When running in terminal print both PDF with size and opn
   ls -lah "${pdf//.pdf/}"*
-  xdg-open "${finalPdf}"
+  xdg-open "${pdfFilename}"
 else
   # For headless use only output path to PDF
-  echo "${finalPdf}"
+  echo "${  }"
 fi
 
 # Dont leak PDFs, containers or images
 if [[ $COMPRESS == "true" ]]; then rm "${pdf}"; fi
 docker rm -f "${container}" > /dev/null
-# Image might still be in use, but at least try to clean up image 
-docker rmi "${image}" > /dev/null || true
