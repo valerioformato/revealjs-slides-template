@@ -1,20 +1,19 @@
-# Binary classification
+# Title slide
 
 ---
 
-## Classification
+## Title
 
-Identify and separate observations into distinct categories.
- 
-Examples: tag emails as spam, diagnose a particular disease in a patient, identify defective products in a factory line, discard background events in physics analysis, etc...
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 ---
 
 ## Subslide 1
 
 This is a subslide.
+Add three empty lines to get a new vertical slide
 
----
+
 
 ## Subslide 2
 
