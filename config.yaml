@@ -1,0 +1,11 @@
+title: "My title"
+css_theme: "white.css"
+width: 1280
+height: 
+margin: 
+min_scale: 
+max_scale:
+additional_plugins:
+additional_script:
+
+revealjs_version: 4.4.0-r4-dev
